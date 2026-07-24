@@ -15,7 +15,7 @@ const client = new MercadoPagoConfig({
 });
 
 app.get("/", (req, res) => {
-  res.send("test");
+  res.send("test api");
 });
 
 // Endpoint para crear la preferencia
@@ -23,18 +23,16 @@ app.post("/create_preference", async (req, res) => {
   try {
     const preference = new Preference(client);
 
-    const backUrlsDomain = "https://c9a1-181-99-160-130.ngrok-free.app"
+    const backUrlsDomain = "https://c71c-181-13-115-109.ngrok-free.app"
 
     const result = await preference.create({
       body: {
-        items: [
-          {
-            title: req.body.title || "Mi producto",
-            quantity: Number(req.body.quantity) || 1,
-            unit_price: Number(req.body.price) || 100,
-            currency_id: "ARS", 
-          },
-        ],
+        items: req.body.map((item) => ({
+          title: item.title,
+          quantity: Number(item.quantity) || 1,
+          unit_price: Number(item.price),         
+          currency_id: "ARS",
+        })),
         back_urls: {
           success: `${backUrlsDomain}/success`,
           failure: `${backUrlsDomain}/failure`,
