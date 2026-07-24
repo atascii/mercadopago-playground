@@ -7,30 +7,21 @@
     <title>mercadopago</title>
   </head>
   <body>
-    <div id="app"></div>
+    <h1>Generar orden de compra</h1>
+    <div>
+      <strong>Producto: </strong>
+      <p>
+        title: "Celular Samsung" <br />
+        quantity: 1 <br />
+        price: 50000
+      </p>
+    </div>
+    <div>
+      <button id="btnGoToPayment">Generar pago</button>
+    </div>
 
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <hr>
+
     <script type="module" src="/src/main.ts"></script>
-    <script>
-      // Configure sua chave pública do Mercado Pago
-      const publicKey = "APP_USR-338c2265-4b33-4060-9194-fe30a85c2e51";
-      // Configure o ID de preferência que você deve receber do seu backend
-      const preferenceId = "3548269892-b81172ed-0f71-48ae-ac9c-fbbf1b81d331";
-
-      // Inicializa o SDK do Mercado Pago
-      const mp = new MercadoPago(publicKey);
-
-      // Cria o botão de pagamento
-      const bricksBuilder = mp.bricks();
-      const renderWalletBrick = async (bricksBuilder) => {
-        await bricksBuilder.create("wallet", "walletBrick_container", {
-          initialization: {
-            preferenceId
-          },
-        });
-      };
-
-      renderWalletBrick(bricksBuilder);
-    </script>
   </body>
 </html>
