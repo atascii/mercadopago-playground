@@ -6,6 +6,20 @@ import "dotenv/config";
 const app = express();
 const PORT = 3000;
 
+const requiredEnvironmentVariables = ["MP_ACCESS_TOKEN", "MP_PUBLIC_BASE_URL"];
+const missingEnvironmentVariables = requiredEnvironmentVariables.filter(
+  (variableName) => !process.env[variableName],
+);
+
+if (missingEnvironmentVariables.length > 0) {
+  console.error(
+    `Faltan variables de entorno requeridas: ${missingEnvironmentVariables.join(", ")}. Copiá .env.example a .env y completalas.`,
+  );
+  process.exit(1);
+}
+
+const publicBaseUrl = process.env.MP_PUBLIC_BASE_URL.replace(/\/+$/, "");
+
 app.use(cors());
 app.use(express.json());
 
@@ -23,7 +37,7 @@ app.post("/create_preference", async (req, res) => {
   try {
     const preference = new Preference(client);
 
-    const backUrlsDomain = "https://c71c-181-13-115-109.ngrok-free.app"
+    const backUrlsDomain = publicBaseUrl
 
     const result = await preference.create({
       body: {
