@@ -1,36 +1,36 @@
 
-## Configuración
+## Configuración y puesta en marcha
 
-1. Dentro del archivo .env, completar el access token que se genera al crear
-   las credenciales de la aplicación (en Tus Integraciones de Mercado Pago):
+1. Instalar las dependencias una sola vez:
+
+   npm install
+
+2. Copiar el archivo `.env.example` como `.env` y completar el access token
+   de prueba que se genera en Tus Integraciones de Mercado Pago:
 
    MP_ACCESS_TOKEN=...
 
-## Levantar la aplicación
+3. En una primera terminal, iniciar ngrok antes de la aplicación:
 
-Abrir una primera terminal:
+   ngrok http 3000
 
-- Instalar dependencias: npm install
-- Ejecutar la aplicación: npm start
+   (Instalarlo desde https://ngrok.com/use-cases/share-localhost)
 
-Esto levanta un servidor Express (server/server.js) en el puerto 3000
-y el front (Vite) en el puerto 5173.
+4. Copiar la URL HTTPS `Forwarding` que muestra ngrok y asignarla a
+   `MP_PUBLIC_BASE_URL` dentro de `.env`:
 
-Acceder por navegador a http://localhost:5173
+   Ejemplo:
+   MP_PUBLIC_BASE_URL=https://tu-subdominio.ngrok-free.app
 
-## Exponer el servidor con ngrok
+5. En una segunda terminal, iniciar la aplicación:
 
-Abrir una segunda terminal y ejecutar:
+   npm start
 
-ngrok http 3000
+Esto levanta el servidor Express en el puerto 3000 y el frontend Vite en el
+puerto 5173. Accedé desde el navegador a http://localhost:5173.
 
-(Instalarlo desde https://ngrok.com/use-cases/share-localhost)
+Si reiniciás ngrok y cambia su URL, actualizá `MP_PUBLIC_BASE_URL` en `.env` y
+reiniciá `npm start` para que el servidor lea el nuevo valor.
 
-Esta herramienta expone el puerto 3000 de manera pública en internet.
-Copiar la URL "Forwarding" y en server.js asignarla a la variable backUrlsDomain.
-Por ejemplo:
-
-const backUrlsDomain = "https://f35a-181-99-160-130.ngrok-free.app"
-
-Esto es necesario para que Mercado Pago pueda enviar las notificaciones webhook
-y para que las back_urls de redirección funcionen correctamente.
+La URL pública es necesaria para que Mercado Pago pueda enviar los webhooks y
+para que funcionen las `back_urls` de redirección.
