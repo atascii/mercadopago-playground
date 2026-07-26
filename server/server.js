@@ -32,6 +32,54 @@ app.get("/", (req, res) => {
   res.send("test api");
 });
 
+const DEFAULT_PAYMENTS_LIMIT = 10;
+const MAX_PAYMENTS_LIMIT = 50;
+
+const getPaginationValue = (value, fallback, maximum) => {
+  const parsedValue = Number.parseInt(String(value), 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue < 0) return fallback;
+
+  return Math.min(parsedValue, maximum);
+};
+
+// Lista pagos sin exponer la respuesta completa de Mercado Pago al navegador.
+app.get("/payments", async (req, res) => {
+  const offset = getPaginationValue(req.query.offset, 0, Number.MAX_SAFE_INTEGER);
+  const limit = getPaginationValue(req.query.limit, DEFAULT_PAYMENTS_LIMIT, MAX_PAYMENTS_LIMIT);
+
+  try {
+    const payment = new Payment(client);
+    const result = await payment.search({
+      options: { limit, offset, sort: "date_created", criteria: "desc" },
+    });
+
+    const payments = (result.results || []).map((paymentResult) => ({
+      id: paymentResult.id || null,
+      dateCreated: paymentResult.date_created || null,
+      payerEmail: paymentResult.payer?.email || null,
+      paymentMethod: paymentResult.payment_method_id || null,
+      paymentType: paymentResult.payment_type_id || null,
+      amount: paymentResult.transaction_amount ?? null,
+      currency: paymentResult.currency_id || "ARS",
+      status: paymentResult.status || "unknown",
+      statusDetail: paymentResult.status_detail || null,
+    }));
+
+    res.json({
+      payments,
+      paging: {
+        total: result.paging?.total || 0,
+        limit: result.paging?.limit || limit,
+        offset: result.paging?.offset || offset,
+      },
+    });
+  } catch (error) {
+    console.error("Error al listar pagos:", error);
+    res.status(502).json({ error: "No se pudieron obtener los pagos de Mercado Pago" });
+  }
+});
+
 // Endpoint para crear la preferencia
 app.post("/create_preference", async (req, res) => {
   try {

@@ -9,6 +9,8 @@
   <body class="bg-light">
     <header class="border-bottom bg-white"><div class="container py-3"><a class="text-decoration-none" href="/">← Volver a ejemplos</a></div></header>
     <main class="container py-5">
+
+      <!-- Módulo - Generar una preferencia de pago -->
       <section class="card shadow-sm" aria-labelledby="page-title"><div class="card-body p-4">
         <h1 id="page-title" class="h3">Crear preferencia de prueba</h1>
         <p class="text-secondary">Este ejemplo envía dos productos fijos al endpoint local.</p>
@@ -19,6 +21,36 @@
         <button id="btnGoToPayment" class="btn btn-primary" type="button">Generar pago</button>
         <p id="paymentStatus" class="mt-3 mb-0" role="status" aria-live="polite"></p>
       </div></section>
+
+      <!-- Módulo - Listado de lagos realizados -->
+      <section class="card shadow-sm mt-4" aria-labelledby="payments-title">
+        <div class="card-body p-4">
+          <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
+            <div>
+              <h2 id="payments-title" class="h4 mb-1">Listado de pagos realizados</h2>
+              <p class="text-secondary mb-0">Consultá los últimos pagos asociados a tu cuenta de prueba.</p>
+            </div>
+            <button id="getPaymentsButton" class="btn btn-outline-primary" type="button">Obtener pagos</button>
+          </div>
+          <p id="paymentsStatus" class="mb-3" role="status" aria-live="polite">Todavía no se consultaron pagos.</p>
+          <div id="paymentsTableContainer" class="table-responsive d-none" tabindex="0">
+            <table id="paymentsTable" class="table table-hover align-middle mb-0">
+              <caption class="visually-hidden">Pagos realizados</caption>
+              <thead class="table-light"><tr><th scope="col">ID</th><th scope="col">Fecha</th><th scope="col">Pagador</th><th scope="col">Método</th><th scope="col" class="text-end">Monto</th><th scope="col">Estado</th></tr></thead>
+              <tbody id="paymentsTableBody"></tbody>
+            </table>
+          </div>
+          <nav id="paymentsPagination" class="d-none mt-3" aria-label="Paginación de pagos">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+              <span id="paymentsRange" class="small text-secondary"></span>
+              <div class="btn-group" role="group" aria-label="Controles de paginación">
+                <button id="previousPaymentsButton" class="btn btn-outline-secondary" type="button" aria-controls="paymentsTable">Anterior</button>
+                <button id="nextPaymentsButton" class="btn btn-outline-secondary" type="button" aria-controls="paymentsTable">Siguiente</button>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </section>
     </main>
     <script type="module" src="./app.js"></script>
   </body>
