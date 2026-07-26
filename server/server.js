@@ -6,7 +6,7 @@ import "dotenv/config";
 const app = express();
 const PORT = 3000;
 
-const requiredEnvironmentVariables = ["MP_ACCESS_TOKEN", "MP_PUBLIC_BASE_URL"];
+const requiredEnvironmentVariables = ["MP_ACCESS_TOKEN", "MP_PUBLIC_BASE_URL", "MP_INTEGRATOR_ID"];
 const missingEnvironmentVariables = requiredEnvironmentVariables.filter(
   (variableName) => !process.env[variableName],
 );
@@ -26,6 +26,9 @@ app.use(express.json());
 // Inicializar el cliente con tu Access Token de prueba
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN,
+  options: {
+    integratorId: process.env.MP_INTEGRATOR_ID,
+  },
 });
 
 app.get("/", (req, res) => {

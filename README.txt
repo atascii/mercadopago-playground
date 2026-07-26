@@ -9,6 +9,7 @@
    de prueba que se genera en Tus Integraciones de Mercado Pago:
 
    MP_ACCESS_TOKEN=...
+   MP_INTEGRATOR_ID=...
 
 3. En una primera terminal, iniciar ngrok antes de la aplicación:
 
