@@ -1,108 +1,24 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ecommerce Demo</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <style>
-    .card-img-top {
-      height: 220px;
-      object-fit: contain;
-      padding: 1rem;
-      background: #f8f9fa;
-    }
-    .badge-cart {
-      position: absolute;
-      top: -5px;
-      right: -10px;
-      font-size: 0.65rem;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="#">Ecommerce Demo</a>
-      <div class="d-flex align-items-center gap-3">
-        <span class="position-relative text-white">
-          <i class="bi bi-cart3 fs-4"></i>
-          <span id="cartCount" class="badge rounded-pill bg-danger badge-cart">0</span>
-        </span>
-        <button id="btnCheckout" class="btn btn-success btn-sm">
-          <i class="bi bi-bag-check"></i> Ir a checkout
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Productos -->
-  <div class="container">
-    <div class="row g-4" id="productList"></div>
-  </div>
-
-  <!-- Checkout -->
-  <div class="container d-none" id="checkoutSection">
-    <div class="d-flex align-items-center mb-3">
-      <button id="btnBackToStore" class="btn btn-outline-secondary btn-sm me-3">
-        <i class="bi bi-arrow-left"></i> Volver
-      </button>
-      <h3 class="mb-0">Checkout</h3>
-    </div>
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead class="table-light">
-          <tr>
-            <th>Producto</th>
-            <th>Precio unit.</th>
-            <th style="width:120px">Cantidad</th>
-            <th>Subtotal</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="checkoutItems"></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3" class="text-end fw-bold">Total:</td>
-            <td class="fw-bold fs-5" id="checkoutTotal"></td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <div class="text-end mt-3">
-      <button id="btnPay" class="btn btn-success btn-lg">
-        <i class="bi bi-credit-card"></i> Comprar
-      </button>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
     const products = [
       {
         id: 1,
         title: "Mouse Logitech G502",
         description: "Mouse gaming con sensor HERO 25K, 11 botones programables y peso ajustable.",
         price: 45000,
-        image: "mouse.jpg"
+        image: "/ecommerce/mouse.jpg"
       },
       {
         id: 2,
         title: "Teclado Mecánico Redragon K552",
         description: "Teclado mecánico TKL con switches blue, retroiluminación RGB y cuerpo de aluminio.",
         price: 38000,
-        image: "keyboard.jpg"
+        image: "/ecommerce/keyboard.jpg"
       },
       {
         id: 3,
         title: "Monitor Samsung 24\" FHD",
         description: "Monitor IPS 24 pulgadas, 75Hz, FreeSync, bordes ultra delgados.",
         price: 120000,
-        image: "monitor.jpg"
+        image: "/ecommerce/monitor.jpg"
       }
     ]
 
@@ -240,7 +156,8 @@
       }
     }
 
+    window.addToCart = addToCart
+    window.updateQuantity = updateQuantity
+    window.removeFromCart = removeFromCart
+
     render()
-  </script>
-</body>
-</html>

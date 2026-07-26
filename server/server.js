@@ -87,7 +87,7 @@ app.get("/pending", (req, res) => {
 app.post("/webhook", async (req, res) => {
   const { query, body } = req
 
-  console.log("[WEBHOOK] Notificación recibida")
+  console.log("[WEBHOOK] Notificación recibida ----------------------------------")
   console.log("Topic:", query.topic || body.type)
   console.log("ID:", query.id || body.data?.id)
 
@@ -103,7 +103,7 @@ app.post("/webhook", async (req, res) => {
       const payment = new Payment(client)
       const paymentInfo = await payment.get({ id: paymentId })
 
-      console.log("[PAYMENT INFO]")
+      console.log("[PAYMENT INFO] -----")
       console.log("Status:", paymentInfo.status)
       console.log("Status detail:", paymentInfo.status_detail)
       console.log("Monto:", paymentInfo.transaction_amount)
