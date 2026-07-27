@@ -14,8 +14,15 @@ const paymentsPageSize = 10
 let currentPaging = null
 
 const items = [
-  { title: "Celular Samsung", quantity: 1, price: 50000 },
-  { title: "TV Hitachi", quantity: 1, price: 50000 },
+  {
+    id: "4729",
+    title: "Celular Samsung",
+    description: "Celular Samsung de prueba para Checkout Pro",
+    picture_url: "https://placehold.co/600x400/png?text=Celular+Samsung",
+    quantity: 1,
+    unit_price: 2000,
+    currency_id: "ARS",
+  },
 ]
 
 btnGoToPayment.addEventListener("click", async () => {

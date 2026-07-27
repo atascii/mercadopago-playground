@@ -83,8 +83,37 @@ app.get("/payments", async (req, res) => {
   }
 });
 
-// Endpoint para crear la preferencia
+const normalizePreferenceItem = (item) => {
+  if (!item || typeof item !== "object") return null;
+
+  const unitPrice = Number(item.unit_price ?? item.price);
+  const pictureUrl = item.picture_url || item.image;
+
+  if (!Number.isFinite(unitPrice) || unitPrice <= 0) return null;
+
+  return {
+    ...(item.id !== undefined ? { id: String(item.id) } : {}),
+    title: item.title,
+    ...(item.description ? { description: item.description } : {}),
+    ...(typeof pictureUrl === "string" && pictureUrl.startsWith("http") ? { picture_url: pictureUrl } : {}),
+    quantity: Number(item.quantity) || 1,
+    unit_price: unitPrice,
+    currency_id: item.currency_id || "ARS",
+  };
+};
+
+// Endpoint compartido por ecommerce y API Playground.
 app.post("/create_preference", async (req, res) => {
+  if (!Array.isArray(req.body) || req.body.length === 0) {
+    return res.status(400).json({ error: "Se requiere al menos un producto" });
+  }
+
+  const items = req.body.map(normalizePreferenceItem);
+
+  if (items.some((item) => !item || !item.title)) {
+    return res.status(400).json({ error: "Cada producto requiere título y un precio numérico mayor a cero" });
+  }
+
   try {
     const preference = new Preference(client);
 
@@ -92,12 +121,12 @@ app.post("/create_preference", async (req, res) => {
 
     const result = await preference.create({
       body: {
-        items: req.body.map((item) => ({
-          title: item.title,
-          quantity: Number(item.quantity) || 1,
-          unit_price: Number(item.price),         
-          currency_id: "ARS",
-        })),
+        items,
+        payment_methods: {
+          installments: 6,
+          excluded_payment_methods: [{ id: "visa" }],
+        },
+        external_reference: "martind-m@outlook.com",
         back_urls: {
           success: `${backUrlsDomain}/success`,
           failure: `${backUrlsDomain}/failure`,
