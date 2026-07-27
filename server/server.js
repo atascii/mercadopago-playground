@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { randomUUID } from "node:crypto";
 import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
 import "dotenv/config";
 
@@ -115,6 +116,7 @@ app.post("/create_preference", async (req, res) => {
   }
 
   try {
+    const externalReference = randomUUID();
     const preference = new Preference(client);
 
     const backUrlsDomain = publicBaseUrl
@@ -126,10 +128,11 @@ app.post("/create_preference", async (req, res) => {
           installments: 6,
           excluded_payment_methods: [{ id: "visa" }],
         },
-        external_reference: "martind-m@outlook.com",
+        external_reference: externalReference, // identificador de operacion
         back_urls: {
           success: `${backUrlsDomain}/success`,
-          failure: `${backUrlsDomain}/failure`,
+          failure: `${backUrlsDomain}/failure`, // volver sin pago / pago rechazado
+
           pending: `${backUrlsDomain}/pending`,
         },
         auto_return: "approved",
@@ -138,7 +141,7 @@ app.post("/create_preference", async (req, res) => {
     });
 
     // Esto es lo que le mandás al frontend
-    res.json({ id: result.id, init_point: result.init_point, result });
+    res.json({ id: result.id, init_point: result.init_point, external_reference: externalReference, result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al crear la preferencia" });
